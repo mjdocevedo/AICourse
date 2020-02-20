@@ -186,7 +186,9 @@ ftostring(Coef1,0,_) :-
   write(Coef1),!.
 
 ftostring([Z|W],1,_):-
-  iszero(Z,1),!.
+  iszero(Z,0),
+  [A|_] is W,
+  iszero(A,1),!.
 
 ftostring(W,C,C) :-
   iszero(W,C),!.
