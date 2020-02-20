@@ -126,16 +126,15 @@ fcompose(I,C,Coef1,Coef2,Deg2,Out) :-
 
 evaluate(Pol1,X,Y) :-
   polynomial(Pol1,Coef1,Deg1),
-  fevaluate(Pol1,Coef1,X,Deg1,Y),
+  fevaluate(Coef1,X,Deg1,0,Y),
   write(Y),nl.
 
-fevaluate(C,[],_,-1,C) :- !.
-fevaluate(C,[Z|W],X,I,Out) :-
-  degree(C,-1,-1,DegC),
-  B is DegC,
-  New is (Out + Z*(X**B),
-  I is B-1,
-  fevaluate(C,W,X,I,Out).
+fevaluate(_,_,-1,_) :- !.
+fevaluate(W,X,I,P,Out) :-
+  iterator(W,I,0, CoefI),
+  NewP is CoefI + X*P,
+  Aux is I-1,
+  fevaluate(W,X,Aux,NewP,Out).
 
 
 differentiate(Pol1,Name) :-
