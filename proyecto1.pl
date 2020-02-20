@@ -153,7 +153,7 @@ fdifferentiate(Coef1,Deg1,[Z|W],I) :-
   Z is Aux*X,
   fdifferentiate(Coef1,Deg1,W,Aux).
 
-tostring(Pol1, Name) :-
+tostring(Pol1) :-
   polynomial(Pol1,Coef1,Deg1),
   ftostring(Coef1,Deg1,0).
 
@@ -168,46 +168,39 @@ sign(Coef1) :-
 
 iszero(Coef1,Deg1) :-
   Coef1 =\= 0,
-  Deg1 = 0,
-  sign(Coef1),!.
+  Deg1 =:= 0,
+  write(Coef1),!.
 
 iszero(Coef1,Deg1) :-
   Coef1 =\= 0,
-  Deg1 > 0,
+  Deg1 > 1,
   sign(Coef1),
   write('x^'),
   write(Deg1),!.
 
-iszero(Coef1,_) :-
-  Coef1 == 0,!.
+iszero(Coef1,Deg1) :-
+  Coef1 =\= 0,
+  Deg1 =:= 1,
+  sign(Coef1),
+  write('x'),!.
 
+iszero(Coef1,_) :-
+  Coef1 =:= 0,!.
+
+ftostringOne([A|_]):-
+  iszero(A,1),!.
 
 ftostring(Coef1,0,_) :-
   write(Coef1),!.
 
 ftostring([Z|W],1,_):-
   iszero(Z,0),
-  [A|_] is W,
-  iszero(A,1),!.
+  ftostringOne(W),!.
 
-ftostring(W,C,C) :-
-  iszero(W,C),!.
+ftostring([A|_],C,C) :-
+  iszero(A,C),!.
 
 ftostring([Z|W],Deg1,I) :-
-  iszero(Z,Deg1),
+  iszero(Z,I),
   Aux is I+1,
   ftostring(W,Deg1,Aux).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
