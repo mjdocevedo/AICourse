@@ -136,21 +136,19 @@ fevaluate(W,X,I,P,Out) :-
   Aux is I-1,
   fevaluate(W,X,Aux,NewP,Out).
 
+  differentiate(Pol1,Name) :-
+    polynomial(Pol1,Coef1,Deg1),
+    fdifferentiate(Coef1,Deg1,Diff,0),
+    degree(Diff,-1,-1,DegA),
+    write(Diff),nl,
+    write(DegA),
+    assert(polynomial(Name,Diff,DegA)).
 
-differentiate(Pol1,Name) :-
-  polynomial(Pol1,Coef1,Deg1),
-  fdifferentiate(Coef1,Deg1,Diff,0),
-  degree(CoefA,-1,-1,DegA),
-  write(Diff),nl,
-  write(DegA),
-  assert(polynomial(Name,CoefA,DegA)).
+  fdifferentiate(_,0,_,_,[0]) :-!.
 
-fdifferentiate(_,0,_,_,[0]) :-!.
-
-fdifferentiate(_,C,0,C) :- !.
-fdifferentiate(Coef1,Deg1,[Z|W],I) :-
-  Aux is I+1,
-  iterator(Coef1,Aux,0,X),
-  Z is Aux*X,
-
-  fdifferentiate(Coef1,Deg1,W,Aux).
+  fdifferentiate(_,C,[W],C) :- W is 0,!.
+  fdifferentiate(Coef1,Deg1,[Z|W],I) :-
+    Aux is I+1,
+    iterator(Coef1,Aux,0,X),
+    Z is Aux*X,
+    fdifferentiate(Coef1,Deg1,W,Aux).
